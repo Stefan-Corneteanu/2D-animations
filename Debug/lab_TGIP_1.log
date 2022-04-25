@@ -1,0 +1,10 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (ACG_Lab2.vcxproj, ACG_Lab4.vcxproj, lab_TGIP_1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+          1 file(s) copied.
+          1 file(s) copied.
+  main.cpp
+C:\Users\Stefa\OneDrive\Desktop\Academic projects\2D animations\main.cpp(68,14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Stefa\OneDrive\Desktop\Academic projects\2D animations\main.cpp(91,14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Stefa\OneDrive\Desktop\Academic projects\2D animations\main.cpp(114,14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  shader.cpp
+  Generating Code...
+  lab_TGIP_1.vcxproj -> C:\Users\Stefa\OneDrive\Desktop\Academic projects\2D animations\Debug\BigHw1.exe

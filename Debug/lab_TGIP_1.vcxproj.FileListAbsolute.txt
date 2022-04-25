@@ -1,0 +1,7 @@
+C:\Users\Iulia13\Documents\Facultate - An 4\Predat\Sem 1\2020-2021\ACG\Lab2\Lab2 - OpenGL\Debug\ACG_Lab2.exe
+C:\Users\Iulia13\Documents\Facultate - An 4\Predat\Sem 1\2020-2021\ACG\Lab2\Lab2 - OpenGL\Debug\ACG_Lab2.pdb
+F:\Teaching\Sem1\ACG\Lab2\Lab2 - OpenGL\Debug\ACG_Lab2.exe
+F:\Teaching\Sem1\ACG\Lab2\Lab2 - OpenGL\Debug\ACG_Lab2.pdb
+C:\Users\Stefa\OneDrive\Desktop\ACG Labs\BigHW1\Debug\BigHw1.exe
+C:\Users\Stefa\OneDrive\Desktop\ACG Labs\BigHW1 - ex1\Debug\BigHw1.exe
+C:\Users\Stefa\OneDrive\Desktop\Academic projects\2D animations\Debug\BigHw1.exe

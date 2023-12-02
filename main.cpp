@@ -32,18 +32,18 @@ void window_callback(GLFWwindow* window, int new_width, int new_height)
 
 //Variables necessary for chosing the right shape to draw and for the right transformation
 
-int no_sides=0; //how many sides does our figure have
+int no_sides = 0; //how many sides does our figure have
 //To draw the shape based on triangles we will use the fact that the minimum number of triangles we can form 
 //with the points of a shape such that we use all the points of the shape is(no_points-2), and the number of points is equal to the one of the sides
 //initial value is 0 to enhance the idea that nothing should be drawn until we press a key
 
-int offset=-1; //how many indices do we have to skip to reach those that we need, negative value given to enhance the idea that initially nothing
+int offset = -1; //how many indices do we have to skip to reach those that we need, negative value given to enhance the idea that initially nothing
 //should be drawn
 
-float dx=0.0f, dy=0.0f; //the shape must be drawn in a random position. Rather than modifying the data in the vbo we will
+float dx = 0.0f, dy = 0.0f; //the shape must be drawn in a random position. Rather than modifying the data in the vbo we will
 //translate the figure by a vector of coordinates dx dy (the coordinates will be homogenous and normalized)
 
-int transform_flag=0; //the value of this flag will determine if the shape will suffer no transformation (0)
+int transform_flag = 0; //the value of this flag will determine if the shape will suffer no transformation (0)
 //will be translated (1), scaled (2) or rotated (3)
 
 float tx = 0.0f; //variables for the translation of the shape left to right
@@ -142,8 +142,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			sx = 1.0f;
 			sy = 1.0f;
 			angle = 0.0f;
-			bool translation_return = false;
-			bool scaling_return = false;
+			translation_return = false;
+			scaling_return = false;
 		}
 		break;
 
@@ -173,8 +173,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		}
 		break;
 	}
-	
-	
+
+
 }
 
 int main(void)
@@ -333,85 +333,91 @@ int main(void)
 			//transform matrix
 			trans = glm::mat4(1.0f);
 			//translation vector
-			rnd = glm::vec3(dx,dy,0.0f);
+			rnd = glm::vec3(dx, dy, 0.0f);
 			//applying translation
-			trans = glm::translate(trans,rnd);
+			trans = glm::translate(trans, rnd);
 			//we check if there is any additional transform to execute (continuous translation, scaling, or rotation)
 
 			switch (transform_flag) {
-				case 0: //no transform
-					trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
-					trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
-					trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
-					break;
+			case 0: //no transform
+				trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
+				trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
+				trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
+				break;
 
-				case 1: //translation
-					if (!translation_return) {//shape did not reach the end of the window, move to the right
-						tx += 0.0001f;
-						trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f));
-						if (no_sides == 4 || no_sides == 8) {//if we have a square or an octagon (rightmost point is at 0.2f if the shape is centered)
-							if ((0.2f + dx + tx) >= 1.0f) { //if we reached the border of the shape
-								translation_return = true; //go back
-							}
-						}
-						if (no_sides == 6) { //if we have a hexagon (rightmost point is at 0.4f if the shape is centered)
-							if (0.4f + dx + tx >= 1.0f) { //if we reached the border of the shape
-								translation_return = true; //go back
-							}
+			case 1: //translation
+				if (!translation_return) {//shape did not reach the end of the window, move to the right
+					tx += 0.0001f;
+					trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f));
+					if (no_sides == 4 || no_sides == 8) {//if we have a square or an octagon (rightmost point is at 0.2f if the shape is centered)
+						if ((0.2f * sx + dx + tx) >= 1.0f) { //if we reached the border of the shape
+							translation_return = true; //go back
 						}
 					}
-					else {//shape reached the end of the window, move to the left, back to the starting point
-						tx -= 0.0001f;
-						trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f));
-						if (tx <= 0.0f) { //if we reached the starting point, start again moving towards the right border
-							translation_return = false; //start moving to the right again
+					if (no_sides == 6) { //if we have a hexagon (rightmost point is at 0.4f if the shape is centered)
+						if (0.4f * sx + dx + tx >= 1.0f) { //if we reached the border of the shape
+							translation_return = true; //go back
 						}
 					}
-					trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
-					trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
-					break;
-				case 2: //scaling
-					trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
-					if (!scaling_return) { //shape did not occupy whole screen, grow it
-						sx += 0.001f;
-						sy += 0.001f;
-						trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f));
-						if (no_sides == 4 || no_sides == 6) { //case of the square and of the hexagon
-							if (((0.2f+dx)*sx >= 1.0f) && ((-0.2f + dx) * sx <= -1.0f) && ((0.2f + dy) * sy >= 1.0f) && ((-0.2f + dy) * sy <= -1.0f)) {
-								//if all the points are out of bounds then the screen must be fully covered
-								scaling_return = true;
-							}
+				}
+				else {//shape reached the end of the window, move to the left, back to the starting point
+					tx -= 0.0001f;
+					trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f));
+					if (tx <= 0.0f) { //if we reached the starting point, start again moving towards the right border
+						translation_return = false; //start moving to the right again
+					}
+				}
+				trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
+				trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
+				break;
+			case 2: //scaling
+				trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
+				if (!scaling_return) { //shape did not occupy whole screen, grow it
+					sx += 0.001f;
+					sy += 0.001f;
+					trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f));
+					if (no_sides == 4 || no_sides == 6) { //case of the square and of the hexagon
+						if ((0.2f * sx + dx + tx >= 1.0f)
+							&& (-0.2f * sx + dx + tx <= -1.0f)
+							&& (0.2f * sy + dy >= 1.0f)
+							&& (-0.2f * sy + dy <= -1.0f)) {
+							//if all the points are out of bounds then the screen must be fully covered
+							scaling_return = true;
 						}
-						if (no_sides == 8) { //case of the octagon
-							if (((0.1f + dx) * sx >= 1.0f) && ((-0.1f + dx) * sx <= -1.0f) && ((0.1f + dy) * sy >= 1.0f) && ((-0.1f + dy) * sy <= -1.0f)) {
-								//if all the points are out of bounds then the screen must be fully covered
-								scaling_return = true;
-							}
+					}
+					if (no_sides == 8) { //case of the octagon
+						if ((0.1f * sx + dx + tx >= 1.0f)
+							&& (-0.1f * sx + dx + tx <= -1.0f)
+							&& (0.1f * sy + dy >= 1.0f)
+							&& (-0.1f * sy + dy <= -1.0f)) {
+							//if all the points are out of bounds then the screen must be fully covered
+							scaling_return = true;
 						}
+					}
 
+				}
+				else { //shape occupied whole screen, shrink it
+					sx -= 0.001f;
+					sy -= 0.001f;
+					trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f));
+					if (sx <= 0.0f && sy <= 0.0f) {//if we reached initial size, start growing again
+						scaling_return = false;
 					}
-					else { //shape occupied whole screen, shrink it
-						sx -= 0.001f;
-						sy -= 0.001f;
-						trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f));
-						if (sx <= 0.0f && sy <= 0.0f) {//if we reached initial size, start growing again
-							scaling_return = false;
-						}
-					}
-					trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
-					break;
-				case 3: //rotating
-					angle += 1.0f; //increase rotation angle
-					trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
-					trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
-					trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
-					break;
+				}
+				trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); //keep the shape in the current angle
+				break;
+			case 3: //rotating
+				angle += 1.0f; //increase rotation angle
+				trans = glm::translate(trans, glm::vec3(tx, 0.0f, 0.0f)); //keep the effects of the translation function
+				trans = glm::scale(trans, glm::vec3(sx, sy, 0.0f)); //keep the effects of the scaling function
+				trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+				break;
 			}
 			//sending data to vertex shader
 			unsigned int transformLoc = glGetUniformLocation(programID, "transform");
 			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 			//draw the result
-			glDrawElements(GL_TRIANGLES, (no_sides-2)*3, GL_UNSIGNED_INT, (GLvoid*)(offset * sizeof(GLint)));
+			glDrawElements(GL_TRIANGLES, (no_sides - 2) * 3, GL_UNSIGNED_INT, (GLvoid*)(offset * sizeof(GLint)));
 		}
 	}
 

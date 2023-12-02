@@ -15,4 +15,3 @@ Notes:
 Changing the shape will not stop the animation
 If the user initiates an animation while another is performing, only the most recent animation called will perform
 Erasing a shape will also act as a stop for all animations
-The scale function should have started to shrink the current shape once it covered the whole screen
